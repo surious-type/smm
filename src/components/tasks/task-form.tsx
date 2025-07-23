@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { PostType, StrategyType } from '@/enums.ts';
 import {DPanel, DTask} from '@/types.ts';
-import { StepGeneralForm } from '@/components/tasks/step-general-form.tsx';
-import { StepStrategyForm } from '@/components/tasks/step-strategy-form.tsx';
+import {StepGeneralForm, StepGeneralSchema} from '@/components/tasks/step-general-form.tsx';
+import {StepStrategyForm, StepStrategySchema} from '@/components/tasks/step-strategy-form.tsx';
 import {StepPreviewForm, StepPreviewSchema} from "@/components/tasks/step-preview-form.tsx";
 import Task from "@/api/Task.ts";
 
@@ -24,15 +24,15 @@ export default function TaskForm({ panels }: { panels: DPanel[] }) {
     }
 
     const handleSubmit = async () => {
-        const formattedData = formatDataForSubmission(formData)
-        for (const link of formData?.links) {
+        const formattedData = formatDataForSubmission(formData as StepPreviewSchema)
+        for (const link of formData.links as string[]) {
             const formData = {channel_link: link, ...formattedData}
             type FormData = typeof formData
             await Task.create<DTask, FormData>(formData)
         }
     }
 
-    const formatDataForSubmission = (data: Partial<StepPreviewSchema>) => {
+    const formatDataForSubmission = (data: StepPreviewSchema) => {
         const baseData = {
             post_type: data.post_type,
             panel_id: data.panel_id,
@@ -100,7 +100,7 @@ export default function TaskForm({ panels }: { panels: DPanel[] }) {
 
                 {step === 1 && (
                     <StepGeneralForm
-                        defaultValues={formData}
+                        defaultValues={formData as StepGeneralSchema}
                         onSubmit={(data) => {
                             updateFormData(data)
                             nextStep()
@@ -111,7 +111,7 @@ export default function TaskForm({ panels }: { panels: DPanel[] }) {
                 {step === 2 && (
                     <StepStrategyForm
                         panels={panels}
-                        defaultValues={formData}
+                        defaultValues={formData as StepStrategySchema}
                         onSubmit={(data) => {
                             updateFormData(data)
                             nextStep()
@@ -120,7 +120,7 @@ export default function TaskForm({ panels }: { panels: DPanel[] }) {
                     />
                 )}
 
-                {step === 3 && <StepPreviewForm formData={formData} onSubmit={handleSubmit} onBack={prevStep} />}
+                {step === 3 && <StepPreviewForm formData={formData as StepPreviewSchema} onSubmit={handleSubmit} onBack={prevStep} />}
             </CardContent>
         </Card>
     )

@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\StrategyType;
 use App\Http\Resources\TaskResource;
-use App\Models\SimpleStrategy;
-use App\Models\SmartStrategy;
 use App\Models\Task;
+use App\Services\TaskService;
 use Illuminate\Http\Request;
-use App\Enums\TaskStatus;
 
 class TaskController extends Controller
 {
+    public function __construct(readonly private TaskService $taskService)
+    {
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -25,17 +26,7 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        $strategy_type = $request->get('strategy_type');
-        $strategy = $request->get('strategy');
-        $strategy = match ($strategy_type) {
-            StrategyType::SIMPLE->value => SimpleStrategy::create($strategy),
-            StrategyType::SMART->value => SmartStrategy::create($strategy),
-        };
-        $task = Task::create([
-            ...$request->all(),
-            'strategy_id' => $strategy->id,
-            'status' => TaskStatus::CREATED->value,
-        ]);
+        $task = $this->taskService->create($request->all());
 
         return new TaskResource($task);
     }
