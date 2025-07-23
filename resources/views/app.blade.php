@@ -7,7 +7,6 @@
     <title>App</title>
     {{--    <link rel="icon" href="/public/favicon.svg" sizes="any" type="image/svg+xml">--}}
     {{--    <link rel="apple-touch-icon" href="/public/apple-touch-icon-180x180.png" sizes="180x180">--}}
-    <link rel="manifest" href="/build/manifest.webmanifest">
     @viteReactRefresh
     @vite('src/main.tsx')
 </head>
