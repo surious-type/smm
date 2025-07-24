@@ -4,15 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="32273e61-f0a4-4af2-bba2-d6860169118c" name="Changes" comment="sample project with auth, admin user, setting project">
-      <change afterPath="$PROJECT_DIR$/app/Services/OrderService.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Services/PostService.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Services/Telegram/ApiClient.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="32273e61-f0a4-4af2-bba2-d6860169118c" name="Changes" comment="handle task store">
+      <change afterPath="$PROJECT_DIR$/app/Services/Observers/NewPostObserverService.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/TaskController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/TaskController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/tasks/task-form.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/tasks/task-form.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Task.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Task.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Services/OrderService.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Services/OrderService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Services/TaskService.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Services/TaskService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/services.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/services.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -202,8 +201,8 @@
       <window_info id="Commit_Guest" show_stripe_button="false" />
       <window_info id="Pull Requests" />
       <window_info id="Robo tasks" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15056819" />
-      <window_info id="Commit" order="1" weight="0.15056819" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14332604" />
+      <window_info id="Commit" order="1" weight="0.30139983" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Database Changes" />
       <window_info anchor="bottom" id="TypeScript" />
@@ -212,7 +211,7 @@
       <window_info anchor="bottom" id="Version Control" order="0" weight="0.3300936" />
       <window_info anchor="bottom" id="Problems" order="1" />
       <window_info anchor="bottom" id="Problems View" order="2" />
-      <window_info anchor="bottom" id="Terminal" order="3" weight="0.3423326" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="3" visible="true" weight="0.3426194" />
       <window_info anchor="bottom" id="Run" order="4" weight="0.3300936" />
       <window_info anchor="bottom" id="Services" order="5" />
       <window_info anchor="bottom" id="Find" order="6" weight="0.3300936" />
@@ -232,6 +231,9 @@
       <recent name="$PROJECT_DIR$/app/Http" />
       <recent name="$PROJECT_DIR$/src/api" />
       <recent name="$PROJECT_DIR$/src/routes" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/Services/Observers" />
     </key>
   </component>
   <component name="RunManager" selected="npm.dev">
@@ -282,7 +284,7 @@
       <workItem from="1752730275521" duration="8782000" />
       <workItem from="1752819029774" duration="22509000" />
       <workItem from="1753184983510" duration="30948000" />
-      <workItem from="1753297697042" duration="5972000" />
+      <workItem from="1753297697042" duration="10766000" />
     </task>
     <task id="LOCAL-00001" summary="raw vite-react in laravel">
       <option name="closed" value="true" />
@@ -332,7 +334,23 @@
       <option name="project" value="LOCAL" />
       <updated>1752829248488</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="update .gitignore">
+      <option name="closed" value="true" />
+      <created>1753308631578</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1753308631578</updated>
+    </task>
+    <task id="LOCAL-00008" summary="handle task store">
+      <option name="closed" value="true" />
+      <created>1753308645963</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1753308645963</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -345,7 +363,9 @@
     <MESSAGE value="app middleware for api" />
     <MESSAGE value="remove shit files" />
     <MESSAGE value="sample project with auth, admin user, setting project" />
-    <option name="LAST_COMMIT_MESSAGE" value="sample project with auth, admin user, setting project" />
+    <MESSAGE value="update .gitignore" />
+    <MESSAGE value="handle task store" />
+    <option name="LAST_COMMIT_MESSAGE" value="handle task store" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

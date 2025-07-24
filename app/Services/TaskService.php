@@ -5,14 +5,15 @@ namespace App\Services;
 use App\Enums\PostType;
 use App\Enums\TaskStatus;
 use App\Models\Task;
+use App\Services\Observers\NewPostObserverService;
 use App\Services\Telegram\ApiClient;
 
 readonly class TaskService
 {
     public function __construct(
         private StrategyService $strategyService,
-        private ApiClient $apiClient,
-        private PostService $postService,
+        private ApiClient       $apiClient,
+        private PostService     $postService,
     )
     {
     }
@@ -34,22 +35,30 @@ readonly class TaskService
      */
     public function initializeTask(Task $task): void
     {
-        // todo вызывать из обсёрвера, чтобы не замораживать поток
         switch ($task->post_type) {
-            case PostType::NEW->value:
-                // todo что если постов в канале нет
-                $post = $this->apiClient->mockFetchPostsLatest($task->channel_link, 1);
-                $task->update(['last_message_id' => $post->id]);
+            case PostType::NEW:
+                $posts = $this->apiClient->fetchPostsSince(
+                    $task->channel_link,
+                    $task->last_message_id
+                );
+                if (empty($posts)) {
+                    throw new \Exception("Нет новых постов для канала");
+                }
+                $last = $this->getMaxMessageIdForPosts($posts);
+                $task->update([
+                    'last_message_id' => $last,
+                    'status' => TaskStatus::STARTED->value,
+                ]);
                 app(NewPostObserverService::class)->attach($task);
-                $task->update(['status' => TaskStatus::STARTED->value]);
                 break;
-            case PostType::EXISTING->value:
-                // todo что если постов меньше, (или запрошу отрицательное количество)
+
+            case PostType::EXISTING:
                 $this->handleExisting($task);
                 $task->update(['status' => TaskStatus::STARTED->value]);
                 break;
+
             default:
-                throw new \Exception("Тип задачи не определён");
+                throw new \Exception("Неподдерживаемый тип задачи");
         }
     }
 
@@ -65,7 +74,7 @@ readonly class TaskService
         }
     }
 
-    private function handleNew(Task $task)
+    public function handleNew(Task $task)
     {
         $posts = $this->apiClient->mockFetchPostsSince(
             $task->channel_link,
@@ -75,5 +84,17 @@ readonly class TaskService
         foreach ($posts as $item) {
             $this->postService->create($task, $item);
         }
+
+        $task->update([
+            'last_message_id' => max(
+                $task->last_message_id,
+                $this->getMaxMessageIdForPosts($posts)
+            ),
+        ]);
+    }
+
+    private function getMaxMessageIdForPosts(array $posts): int
+    {
+        return max(array_column($posts, 'message_id'));
     }
 }

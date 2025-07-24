@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enums\OrderStatus;
+use App\Enums\StrategyType;
 use App\Models\Order;
 use App\Models\Post;
 use App\Models\Task;
@@ -13,7 +14,7 @@ class OrderService
     {
         $strategy = $task->strategy;
 
-        if ($task->strategy_type === 'simple') {
+        if ($task->strategy_type === StrategyType::SIMPLE->value) {
             Order::create([
                 'post_id' => $post->id,
                 'service_id' => $strategy->service_id,
