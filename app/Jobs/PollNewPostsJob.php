@@ -2,15 +2,16 @@
 
 namespace App\Jobs;
 
+use App\Enums\TaskStatus;
 use App\Services\TaskService;
 use App\Models\Task;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\{ShouldQueue, ShouldBeUnique};
+use Illuminate\Contracts\Queue\{ShouldQueue};
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class PollNewPostsJob implements ShouldQueue, ShouldBeUnique
+class PollNewPostsJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -26,11 +27,10 @@ class PollNewPostsJob implements ShouldQueue, ShouldBeUnique
 
         $taskService->handleNew($task);
 
-        self::dispatch($task->id)->delay(now()->addMinute());
-    }
-
-    public function uniqueId(): string
-    {
-        return "poll_new_posts_for_task_$this->taskId";
+        if ($task->end_at && now()->lt($task->end_at)) {
+            self::dispatch($task->id)->delay(now()->addMinute());
+        } else {
+            $task->update(['status' => TaskStatus::DONE->value]);
+        }
     }
 }

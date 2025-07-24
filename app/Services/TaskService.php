@@ -5,14 +5,14 @@ namespace App\Services;
 use App\Enums\PostType;
 use App\Enums\TaskStatus;
 use App\Models\Task;
+use App\Services\Api\TelegramClient;
 use App\Services\Observers\NewPostObserverService;
-use App\Services\Telegram\ApiClient;
 
 readonly class TaskService
 {
     public function __construct(
         private StrategyService        $strategyService,
-        private ApiClient              $apiClient,
+        private TelegramClient         $apiClient,
         private PostService            $postService,
         private NewPostObserverService $observerService,
     )
@@ -38,19 +38,25 @@ readonly class TaskService
     {
         switch ($task->post_type) {
             case PostType::NEW:
-                $posts = $this->apiClient->mockFetchPostsLatest(
-                    $task->channel_link,
-                    1
-                );
-                if (empty($posts)) {
-                    throw new \Exception("Нет новых постов для канала");
+                // todo это должно быть в наблюдателе, как фикс для следующего todo
+                if (!$task->last_message_id) {
+                    $posts = $this->apiClient->mockFetchPostsLatest(
+                        $task->channel_link,
+                        1
+                    );
+                    if (empty($posts)) {
+                        // todo либо помечать задачу статусом ERROR, либо что то предумать чтобы все же запустить наблюдателя без id последнего сообщения
+                        throw new \Exception("Нет новых постов для канала");
+                    }
+                    $last = $this->getMaxMessageIdForPosts($posts);
+                    $task->update([
+                        'last_message_id' => $last,
+                        'status' => TaskStatus::STARTED->value,
+                    ]);
+                    $this->observerService->attach($task);
+                } else {
+                    // handleNew
                 }
-                $last = $this->getMaxMessageIdForPosts($posts);
-                $task->update([
-                    'last_message_id' => $last,
-                    'status' => TaskStatus::STARTED->value,
-                ]);
-                $this->observerService->attach($task);
                 break;
 
             case PostType::EXISTING:

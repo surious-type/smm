@@ -12,16 +12,10 @@ class Post extends Model
         'task_id',
         'message_id',
         'published_at',
-        'total_orders',
-        'done_orders',
-        'failed_orders',
     ];
 
     protected $casts = [
         'message_id' => 'integer',
-        'total_orders' => 'integer',
-        'done_orders' => 'integer',
-        'failed_orders' => 'integer',
         'published_at' => 'datetime',
     ];
 
@@ -40,8 +34,18 @@ class Post extends Model
         return rtrim($this->task->channel_link, '/') . '/' . $this->message_id;
     }
 
-    public function getIsCompletedAttribute(): bool
+    public function recalculateStatus(): void
     {
-        return $this->done_orders + $this->failed_orders >= $this->total_orders;
+        $orders = $this->orders;
+        $allDoneOrError = $orders->every(fn($p) => in_array($p->status, ['DONE', 'ERROR']));
+
+        if ($allDoneOrError) {
+            if ($orders->contains(fn($p) => $p->status === 'DONE')) {
+                $this->update(['status' => 'DONE']);
+            } else {
+                $this->update(['status' => 'ERROR']);
+            }
+            $this->task->recalculateStatus();
+        }
     }
 }

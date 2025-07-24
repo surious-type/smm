@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Services\Telegram;
+namespace App\Services\Api;
 
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\RequestException;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Http;
 
 /**
  * Клиент для работы со сторонним API Telegram-постов.
  */
-readonly class ApiClient
+readonly class TelegramClient
 {
     public function __construct(
         private string $baseUrl,

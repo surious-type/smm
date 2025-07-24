@@ -20,9 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('message_id');
             $table->timestamp('published_at')->nullable();
 
-            $table->unsignedInteger('total_orders')->default(0);
-            $table->unsignedInteger('done_orders')->default(0);
-            $table->unsignedInteger('failed_orders')->default(0);
+            $table->enum('status', ['CREATED', 'STARTED', 'DONE', 'ERROR'])->default('CREATED');
 
             $table->timestamps();
 

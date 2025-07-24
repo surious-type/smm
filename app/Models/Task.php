@@ -80,4 +80,18 @@ class Task extends Model
     {
         return $this->post_type === PostType::EXISTING;
     }
+
+    public function recalculateStatus(): void
+    {
+        $posts = $this->posts;
+        $allDoneOrError = $posts->every(fn($p) => in_array($p->status, ['DONE', 'ERROR']));
+
+        if ($allDoneOrError && $posts->count() > 0) {
+            if ($posts->contains(fn($p) => $p->status === 'DONE')) {
+                $this->update(['status' => 'DONE']);
+            } else {
+                $this->update(['status' => 'ERROR']);
+            }
+        }
+    }
 }
