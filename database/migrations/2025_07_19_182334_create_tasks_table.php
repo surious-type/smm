@@ -38,7 +38,7 @@ return new class extends Migration
             $table->enum('status', ['CREATED', 'STARTED', 'DONE', 'ERROR'])->default('CREATED');
 
             $table->unsignedBigInteger('strategy_id');
-            $table->enum('strategy_type', ['SIMPLE', 'SMART']);
+            $table->string('strategy_type');
             $table->timestamps();
         });
     }

@@ -5,13 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="32273e61-f0a4-4af2-bba2-d6860169118c" name="Changes" comment="handle task store">
-      <change afterPath="$PROJECT_DIR$/app/Services/Observers/NewPostObserverService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Jobs/PollNewPostsJob.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Jobs/PollNewPostsJob.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Models/Task.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Task.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Observers/TaskObserver.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Observers/TaskObserver.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Services/Observers/NewPostObserverService.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Services/Observers/NewPostObserverService.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Services/OrderService.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Services/OrderService.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Services/TaskService.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Services/TaskService.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/services.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/services.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2025_07_19_182334_create_tasks_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2025_07_19_182334_create_tasks_table.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -162,6 +167,7 @@
       <path value="$PROJECT_DIR$/vendor/league/commonmark" />
       <path value="$PROJECT_DIR$/vendor/league/flysystem-local" />
       <path value="$PROJECT_DIR$/vendor/laravel/sanctum" />
+      <path value="$PROJECT_DIR$/vendor/beyondcode/laravel-dump-server" />
     </include_path>
   </component>
   <component name="ProjectColorInfo">{
@@ -201,8 +207,8 @@
       <window_info id="Commit_Guest" show_stripe_button="false" />
       <window_info id="Pull Requests" />
       <window_info id="Robo tasks" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14332604" />
-      <window_info id="Commit" order="1" weight="0.30139983" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.37401575" />
+      <window_info id="Commit" order="1" weight="0.14332604" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Database Changes" />
       <window_info anchor="bottom" id="TypeScript" />
@@ -211,15 +217,16 @@
       <window_info anchor="bottom" id="Version Control" order="0" weight="0.3300936" />
       <window_info anchor="bottom" id="Problems" order="1" />
       <window_info anchor="bottom" id="Problems View" order="2" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="3" visible="true" weight="0.3426194" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="3" visible="true" weight="0.34089273" />
       <window_info anchor="bottom" id="Run" order="4" weight="0.3300936" />
       <window_info anchor="bottom" id="Services" order="5" />
       <window_info anchor="bottom" id="Find" order="6" weight="0.3300936" />
       <window_info anchor="right" id="make" side_tool="true" />
+      <window_info anchor="right" id="documentation.v2" show_stripe_button="false" side_tool="true" />
       <window_info anchor="right" id="Coverage" side_tool="true" />
       <window_info anchor="right" content_ui="combo" id="Notifications" order="0" weight="0.25" />
       <window_info anchor="right" id="AIAssistant" order="1" weight="0.25" />
-      <window_info anchor="right" id="Database" order="2" weight="0.33020103" />
+      <window_info active="true" anchor="right" id="Database" order="2" visible="true" weight="0.31102362" />
       <window_info anchor="right" id="Gradle" order="3" weight="0.25" />
       <window_info anchor="right" id="Maven" order="4" weight="0.25" />
     </layout>
@@ -284,7 +291,7 @@
       <workItem from="1752730275521" duration="8782000" />
       <workItem from="1752819029774" duration="22509000" />
       <workItem from="1753184983510" duration="30948000" />
-      <workItem from="1753297697042" duration="10766000" />
+      <workItem from="1753297697042" duration="17384000" />
     </task>
     <task id="LOCAL-00001" summary="raw vite-react in laravel">
       <option name="closed" value="true" />
@@ -350,7 +357,15 @@
       <option name="project" value="LOCAL" />
       <updated>1753308645963</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="handle task store">
+      <option name="closed" value="true" />
+      <created>1753360955395</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1753360955395</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

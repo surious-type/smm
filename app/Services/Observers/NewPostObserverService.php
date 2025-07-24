@@ -9,6 +9,6 @@ class NewPostObserverService
 {
     public function attach(Task $task): void
     {
-        PollNewPostsJob::dispatch($task)->delay(now()->addMinute());
+        PollNewPostsJob::dispatch($task->id);
     }
 }

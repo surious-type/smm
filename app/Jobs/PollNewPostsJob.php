@@ -15,19 +15,22 @@ class PollNewPostsJob implements ShouldQueue, ShouldBeUnique
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public function __construct(
-        private readonly Task $task,
-        private readonly TaskService $taskService,
-    ) {}
+        private readonly int $taskId,
+    )
+    {
+    }
 
-    public function handle(): void {
-        $this->taskService->handleNew($this->task);
+    public function handle(TaskService $taskService): void
+    {
+        $task = Task::findOrFail($this->taskId);
 
-        self::dispatch($this->task)
-            ->delay(now()->addMinute());
+        $taskService->handleNew($task);
+
+        self::dispatch($task->id)->delay(now()->addMinute());
     }
 
     public function uniqueId(): string
     {
-        return "poll_new_posts_for_task_{$this->task->id}";
+        return "poll_new_posts_for_task_$this->taskId";
     }
 }

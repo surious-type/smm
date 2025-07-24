@@ -11,9 +11,10 @@ use App\Services\Telegram\ApiClient;
 readonly class TaskService
 {
     public function __construct(
-        private StrategyService $strategyService,
-        private ApiClient       $apiClient,
-        private PostService     $postService,
+        private StrategyService        $strategyService,
+        private ApiClient              $apiClient,
+        private PostService            $postService,
+        private NewPostObserverService $observerService,
     )
     {
     }
@@ -37,9 +38,9 @@ readonly class TaskService
     {
         switch ($task->post_type) {
             case PostType::NEW:
-                $posts = $this->apiClient->fetchPostsSince(
+                $posts = $this->apiClient->mockFetchPostsLatest(
                     $task->channel_link,
-                    $task->last_message_id
+                    1
                 );
                 if (empty($posts)) {
                     throw new \Exception("Нет новых постов для канала");
@@ -49,7 +50,7 @@ readonly class TaskService
                     'last_message_id' => $last,
                     'status' => TaskStatus::STARTED->value,
                 ]);
-                app(NewPostObserverService::class)->attach($task);
+                $this->observerService->attach($task);
                 break;
 
             case PostType::EXISTING:
@@ -95,6 +96,6 @@ readonly class TaskService
 
     private function getMaxMessageIdForPosts(array $posts): int
     {
-        return max(array_column($posts, 'message_id'));
+        return collect($posts)->max('id');
     }
 }

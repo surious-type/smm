@@ -14,7 +14,7 @@ class OrderService
     {
         $strategy = $task->strategy;
 
-        if ($task->strategy_type === StrategyType::SIMPLE->value) {
+        if ($task->strategy_type === StrategyType::SIMPLE) {
             Order::create([
                 'post_id' => $post->id,
                 'service_id' => $strategy->service_id,

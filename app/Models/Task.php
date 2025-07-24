@@ -7,6 +7,7 @@ use App\Enums\StrategyType;
 use App\Enums\TaskStatus;
 use App\Observers\TaskObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -38,6 +39,26 @@ class Task extends Model
     public function strategy(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    protected function strategyType(): Attribute
+    {
+        return Attribute::make(
+            get: function (?string $value) {
+                return match ($value) {
+                    SimpleStrategy::class => StrategyType::SIMPLE,
+                    SmartStrategy::class  => StrategyType::SMART,
+                    default => null,
+                };
+            },
+            set: function (StrategyType|string $value) {
+                $type = $value instanceof StrategyType ? $value : StrategyType::from($value);
+                return match ($type) {
+                    StrategyType::SIMPLE => SimpleStrategy::class,
+                    StrategyType::SMART  => SmartStrategy::class,
+                };
+            }
+        );
     }
 
     public function panel(): BelongsTo
