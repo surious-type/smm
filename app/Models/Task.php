@@ -88,9 +88,9 @@ class Task extends Model
 
         if ($allDoneOrError && $posts->count() > 0) {
             if ($posts->contains(fn($p) => $p->status === 'DONE')) {
-                $this->update(['status' => 'DONE']);
-            } else {
                 $this->update(['status' => 'ERROR']);
+            } else {
+                $this->update(['status' => 'DONE']);
             }
         }
     }

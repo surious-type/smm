@@ -3,7 +3,6 @@
 namespace App\Observers;
 
 use App\Enums\OrderStatus;
-use App\Jobs\PollOrderStatusJob;
 use App\Models\Order;
 use App\Services\Api\PanelService;
 
@@ -26,7 +25,6 @@ readonly class OrderObserver
                 'status' => OrderStatus::SENT->value,
                 'external_id' => $externalId,
             ]);
-            PollOrderStatusJob::dispatch($order->id)->delay(now()->addMinute());
         } else {
             $order->update(['status' => OrderStatus::ERROR->value]);
         }
@@ -47,6 +45,6 @@ readonly class OrderObserver
      */
     public function deleted(Order $order): void
     {
-        //
+        // todo отменять заказы
     }
 }

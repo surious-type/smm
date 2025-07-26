@@ -4,17 +4,16 @@ namespace App\Services;
 
 use App\Enums\PostType;
 use App\Enums\TaskStatus;
+use App\Jobs\PollNewPostsJob;
 use App\Models\Task;
 use App\Services\Api\TelegramClient;
-use App\Services\Observers\NewPostObserverService;
 
 readonly class TaskService
 {
     public function __construct(
-        private StrategyService        $strategyService,
-        private TelegramClient         $apiClient,
-        private PostService            $postService,
-        private NewPostObserverService $observerService,
+        private StrategyService $strategyService,
+        private TelegramClient  $apiClient,
+        private PostService     $postService,
     )
     {
     }
@@ -38,25 +37,7 @@ readonly class TaskService
     {
         switch ($task->post_type) {
             case PostType::NEW:
-                // todo это должно быть в наблюдателе, как фикс для следующего todo
-                if (!$task->last_message_id) {
-                    $posts = $this->apiClient->mockFetchPostsLatest(
-                        $task->channel_link,
-                        1
-                    );
-                    if (empty($posts)) {
-                        // todo либо помечать задачу статусом ERROR, либо что то предумать чтобы все же запустить наблюдателя без id последнего сообщения
-                        throw new \Exception("Нет новых постов для канала");
-                    }
-                    $last = $this->getMaxMessageIdForPosts($posts);
-                    $task->update([
-                        'last_message_id' => $last,
-                        'status' => TaskStatus::STARTED->value,
-                    ]);
-                    $this->observerService->attach($task);
-                } else {
-                    // handleNew
-                }
+                PollNewPostsJob::dispatch($task->id);
                 break;
 
             case PostType::EXISTING:
@@ -103,5 +84,17 @@ readonly class TaskService
     private function getMaxMessageIdForPosts(array $posts): int
     {
         return collect($posts)->max('id');
+    }
+
+    public function getLastMessageId(Task $task)
+    {
+        $posts = $this->apiClient->mockFetchPostsLatest(
+            $task->channel_link,
+            1
+        );
+        if (empty($posts)) {
+            PollNewPostsJob::dispatch($task->id)->delay(now()->addMinute());
+        }
+        return $this->getMaxMessageIdForPosts($posts);
     }
 }

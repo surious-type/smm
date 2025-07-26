@@ -25,7 +25,15 @@ class PollNewPostsJob implements ShouldQueue
     {
         $task = Task::findOrFail($this->taskId);
 
-        $taskService->handleNew($task);
+        if ($task->last_message_id) {
+            $taskService->handleNew($task);
+        } else {
+            $last = $taskService->getLastMessageId($task);
+            $task->update([
+                'last_message_id' => $last,
+                'status' => TaskStatus::STARTED->value,
+            ]);
+        }
 
         if ($task->end_at && now()->lt($task->end_at)) {
             self::dispatch($task->id)->delay(now()->addMinute());

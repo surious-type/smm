@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\OrderStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -12,6 +13,7 @@ class Post extends Model
         'task_id',
         'message_id',
         'published_at',
+        'status',
     ];
 
     protected $casts = [
@@ -40,10 +42,10 @@ class Post extends Model
         $allDoneOrError = $orders->every(fn($p) => in_array($p->status, ['DONE', 'ERROR']));
 
         if ($allDoneOrError) {
-            if ($orders->contains(fn($p) => $p->status === 'DONE')) {
-                $this->update(['status' => 'DONE']);
-            } else {
+            if ($orders->contains(fn($p) => $p->status === OrderStatus::ERROR)) {
                 $this->update(['status' => 'ERROR']);
+            } else {
+                $this->update(['status' => 'DONE']);
             }
             $this->task->recalculateStatus();
         }
